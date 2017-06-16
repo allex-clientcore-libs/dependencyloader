@@ -1,0 +1,27 @@
+{
+  "name": "allex_dependencyloaderclientcorelib",
+  "version": "1.0.0",
+  "description": "AllexJS loadDependencies implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allex-clientcore-libs/dependencyloader.git"
+  },
+  "keywords": [
+    "ecosystem:AllexJS",
+    "load",
+    "dependencies",
+    "client",
+    "core",
+    "lib"
+  ],
+  "author": "Andrija Petrovic <andrija.hers@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allex-clientcore-libs/dependencyloader/issues"
+  },
+  "homepage": "https://github.com/allex-clientcore-libs/dependencyloader#readme"
+}
