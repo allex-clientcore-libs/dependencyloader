@@ -47,7 +47,7 @@ function createLoadDeps(execlib) {
   function onmodulename (side, modulename, r) {
     var registry;
     try {
-    if (!r) dodaThrow(lib, 'NON_ALLEX_MODULE', 'Unable to recognize '+modulename+' as Allex module');
+    if (!r || lib.isString(r)) dodaThrow(lib, 'NON_ALLEX_MODULE', 'Unable to recognize '+modulename+' as Allex module');
     switch (r.group) {
       case 'services':
         registry = execlib.execSuite.registry;
