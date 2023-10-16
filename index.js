@@ -5,16 +5,19 @@ function createLoadDeps(execlib) {
     q = lib.q,
     qlib = lib.qlib;
 
-  function dodaThrow (lib, string1, string2) {
+  function dodaThrow (string1, string2) {
     throw new lib.Error(string1, string2);
   }
 
   function getmodulename (side, modulename) {
-    return recognizemodule.bind(null, side, modulename);
+    var ret = recognizemodule.bind(null, side, modulename);
+    side = null;
+    modulename = null;
+    return ret;
   }
 
   function recognizemodule (side, modulename) {
-    var r;
+    var r, ret;
     switch (modulename) {
       case '.':
         r = q({
@@ -32,7 +35,10 @@ function createLoadDeps(execlib) {
         r = lib.moduleRecognition(modulename);
         break;
     }
-    return r.then(onmodulename.bind(null, side, modulename));
+    ret = r.then(onmodulename.bind(null, side, modulename));
+    side = null;
+    modulename = null;
+    return ret;
   };
 
   function onAdditionalGroup (r) {
@@ -41,13 +47,13 @@ function createLoadDeps(execlib) {
       return registry.register(r.modulename);
     }
     console.error('Unable to load registry for type '+r.group);
-    dodaThrow(lib, 'MISSING_REGISTRY', 'Unable to load registry for type '+r.group);
+    dodaThrow('MISSING_REGISTRY', 'Unable to load registry for type '+r.group);
   }
 
   function onmodulename (side, modulename, r) {
     var registry;
     try {
-    if (!r || lib.isString(r)) dodaThrow(lib, 'NON_ALLEX_MODULE', 'Unable to recognize '+modulename+' as Allex module');
+    if (!r || lib.isString(r)) dodaThrow('NON_ALLEX_MODULE', 'Unable to recognize '+modulename+' as Allex module');
     switch (r.group) {
       case 'services':
         registry = execlib.execSuite.registry;
@@ -71,10 +77,10 @@ function createLoadDeps(execlib) {
   }
 
   function loadDependencies (side, modules, cb){
-    var s = side, ret;
-    ret = (new qlib.PromiseExecutionMapReducerJob(modules.map (getmodulename.bind(null, s)), null, cb)).go();
-    s = null;
-    return ret;
+    var ret;
+    ret = (new qlib.PromiseExecutionMapReducerJob(modules.map(getmodulename.bind(null, side)), null, cb)).go();
+    side = null;
+    return qlib.promiseerror2console(ret);
   }
   return loadDependencies;
 }
